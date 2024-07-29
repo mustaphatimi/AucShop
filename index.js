@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
+const userServices = require('./Services/User')
 
 const PORT = 4000;
+
+app.use('/', userServices)
 
 app.get('/', (req, res) => {
     res.json({message: 'Welcome to the AucShop landing page'})
