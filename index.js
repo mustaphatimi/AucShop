@@ -4,7 +4,7 @@ const app = express();
 const PORT = 4000;
 
 app.get('/', (req, res) => {
-    console.log('Welcome to the AucShop Homepage')
+    res.json({message: 'Welcome to the AucShop landing page'})
 })
 
 app.listen(PORT, (req, res) => {
