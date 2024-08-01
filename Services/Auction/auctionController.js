@@ -10,6 +10,7 @@ const io = require('socket.io')(3001, {
 const startAuction = async (req, res) => {
   const { productId, startingBid } = req.body;
   try {
+    await redisClient.connect()
     const result = await pool.query(
       'INSERT INTO auctions (product_id, starting_bid, current_bid, status) VALUES ($1, $2, $2, $3) RETURNING *',
       [productId, startingBid, 'active']
