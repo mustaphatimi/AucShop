@@ -1,42 +1,14 @@
 const express = require('express');
-const router = express.Router();
-const { verifyToken } = require('../../middlewares');
-const { pool } = require('../../db');
+const dotenv = require('dotenv');
+const productRoutes = require('./routes')
 
+dotenv.config();
 
-router.route('/')
-    .get(verifyToken, async (req, res, next) => {
-        try {
-            const query = `SELECT * FROM products`;
-            const products = await pool.query(query);
-            if (!products.rows) {
-                throw new Error('Products not found', 404)
-            }
-            return res.status(200).json({products: products.rows})
-        } catch (error) {
-            next(error)
-        }
-    })
-    .post(verifyToken, async (req, res, next) => {
-    // const { name, description, price, time, startPrice } = req.body;
-    //     if (!name || !description || !price) {
-    //         throw new Error('All fields are required', 400)
-    //     }
-    //     try {
-    //         const addProductQuery = `
-    //             INSERT INTO products (name, description, price)
-    //             VALUES ($1, $2, $3) RETURNING *
-    //             `;
-    //         const result = await productsPool.query(addProductQuery, [name, description, price]);
-    //         if (!result.rows) {
-    //             throw new Error ('Error adding product', 401)
-    //         }
-    //         const newProduct = result.rows[0];
-    //         return res.status(201).json({message: 'Product added successfully', product: newProduct});
-            
-    //     } catch (error) {
-    //         next(error)
-    //     }
-})
+const app = express();
+app.use(express.json());
+app.use('/products', productRoutes);
 
-module.exports = router;
+const port = process.env.DB_PORT || 3000;
+app.listen(port, () => {
+  console.log(`Product service running on port ${port}`);
+});

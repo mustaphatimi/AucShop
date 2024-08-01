@@ -42,6 +42,16 @@ const createProductsTable = `
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `
+const createAuctionsTable = `
+     CREATE TABLE auctions (
+      id SERIAL PRIMARY KEY,
+      product_id INT NOT NULL,
+      starting_bid NUMERIC(10, 2) NOT NULL,
+      current_bid NUMERIC(10, 2) NOT NULL,
+      status VARCHAR(50) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+    `
 
 async function connectDB() {
     await pool.connect().then(() => {
@@ -49,6 +59,7 @@ async function connectDB() {
     })
         // .then(() => {
         // pool.query(createUsersTable)
+        // pool.query(createAuctionsTable)
         // pool.query(createAdminTable)
         // pool.query(createProductsTable)
         // })
