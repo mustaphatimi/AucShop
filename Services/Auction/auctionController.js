@@ -1,4 +1,5 @@
 const pool = require('../db');
+const redisClient = require('../../db/redis');
 const io = require('socket.io')(3001, {
   cors: {
     origin: "*",
@@ -14,6 +15,7 @@ const startAuction = async (req, res) => {
       [productId, startingBid, 'active']
     );
     const auction = result.rows[0];
+    redisClient.set(`auction:${auction.id}`, JSON.stringify(auction));
     io.emit('auction_started', auction);
     res.status(201).json(auction);
   } catch (err) {
